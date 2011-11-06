@@ -1,0 +1,26 @@
+PREFIX sch-ont: <http://education.data.gov.uk/def/school/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX geo:<http://www.w3.org/2003/01/geo/wgs84_pos#>
+SELECT ?name  ?capacity ?web  ?address1 ?address2 ?postcode ?town ?long ?lat WHERE {
+?school A sch-ont:School;
+sch-ont:establishmentName ?name;
+sch-ont:schoolCapacity ?capacity  ;
+sch-ont:religiousCharacter sch-ont:ReligiousCharacter_Does_not_apply ;
+sch-ont:statutoryHighAge ?ageMax ;
+sch-ont:statutoryLowAge ?ageMin ;
+geo:long ?long;
+geo:lat ?lat;
+sch-ont:districtAdministrative ?da .        
+?da rdfs:label "Birmingham".
+OPTIONAL {?school sch-ont:websiteAddress ?web .}
+OPTIONAL {
+        ?school sch-ont:address ?address.
+        ?address sch-ont:address1 ?address1;
+        sch-ont:postcode ?postcode;
+        sch-ont:town ?town.
+        OPTIONAL {?address sch-ont:address2 ?address2. }
+    }
+FILTER (?capacity < 300 && ?ageMax >= 15 && ?ageMin <= 15 )
+}
+ORDER BY DESC(?capacity)
+LIMIT 10

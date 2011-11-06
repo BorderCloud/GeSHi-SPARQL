@@ -1,0 +1,14 @@
+PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbpedia2:<http://dbpedia.org/property/>
+PREFIX dbpedia:<http://dbpedia.org/ontology/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+SELECT ?link ?date ?label ?comment
+WHERE { 
+?film <http://purl.org/dc/terms/subject> <http://dbpedia.org/resource/Category:French_films>;
+        rdfs:comment ?comment;
+        rdfs:label ?label;
+        dbpedia:releaseDate  ?date;
+        foaf:page ?link.
+    FILTER langMatches( lang(?comment), 'en')
+    FILTER langMatches( lang(?label), 'en')
+}ORDER BY ?date OFFSET  1 limit 10 

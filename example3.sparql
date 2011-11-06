@@ -1,0 +1,14 @@
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+DELETE DATA
+{ GRAPH <http://example/bookStore> { 
+<http://example/book2> ?predicat ?objet.
+}}
+
+INSERT DATA
+{ GRAPH <http://example/bookStore> { 
+<http://example/book2> ns:price 44 .
+<http://example/book2> dc:title "Sir David Copperfield"@en .
+<http://example/book2> dc:creator 'Edmond Wells'^^xsd:string@fr-FR .
+<http://example/book2> dc:date "1948-01-02T00:00:00-02:00"^^xsd:dateTime .
+}}

@@ -14,70 +14,8 @@
  * 2011/11/05 (1.0.0)
  *  -  First Release
  *
- * Examples (with Mediawiki)
- * -------------------------
-<source lang="sparql">
-PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
-PREFIX dbpedia2:<http://dbpedia.org/property/>
-PREFIX dbpedia:<http://dbpedia.org/ontology/>
-PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-SELECT ?link ?date ?label ?comment
-WHERE { 
-?film <http://purl.org/dc/terms/subject> <http://dbpedia.org/resource/Category:French_films>;
-        rdfs:comment ?comment;
-        rdfs:label ?label;
-        dbpedia:releaseDate  ?date;
-        foaf:page ?link.
-    FILTER langMatches( lang(?comment), 'en')
-    FILTER langMatches( lang(?label), 'en')
-}ORDER BY ?date OFFSET  1 limit 10 
-</source>
------------------------------------------------------------
-<source lang="sparql">
-PREFIX sch-ont: <http://education.data.gov.uk/def/school/>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX geo:<http://www.w3.org/2003/01/geo/wgs84_pos#>
-SELECT ?name  ?capacity ?web  ?address1 ?address2 ?postcode ?town ?long ?lat WHERE {
-?school A sch-ont:School;
-sch-ont:establishmentName ?name;
-sch-ont:schoolCapacity ?capacity  ;
-sch-ont:religiousCharacter sch-ont:ReligiousCharacter_Does_not_apply ;
-sch-ont:statutoryHighAge ?ageMax ;
-sch-ont:statutoryLowAge ?ageMin ;
-geo:long ?long;
-geo:lat ?lat;
-sch-ont:districtAdministrative ?da .        
-?da rdfs:label "Birmingham".
-OPTIONAL {?school sch-ont:websiteAddress ?web .}
-OPTIONAL {
-        ?school sch-ont:address ?address.
-        ?address sch-ont:address1 ?address1;
-        sch-ont:postcode ?postcode;
-        sch-ont:town ?town.
-        OPTIONAL {?address sch-ont:address2 ?address2. }
-    }
-FILTER (?capacity < 300 && ?ageMax >= 15 && ?ageMin <= 15 )
-}
-ORDER BY DESC(?capacity)
-LIMIT 10
-</source>
-----------------------------------------
-<source lang="sparql">
-PREFIX dc: <http://purl.org/dc/elements/1.1/>
-
-DELETE DATA
-{ GRAPH <http://example/bookStore> { 
-<http://example/book2> ?predicat ?objet.
-}}
-
-INSERT DATA
-{ GRAPH <http://example/bookStore> { 
-<http://example/book2> ns:price 44 .
-<http://example/book2> dc:title "Sir David Copperfield"@en .
-<http://example/book2> dc:creator 'Edmond Wells'^^xsd:string@fr-FR .
-<http://example/book2> dc:date "1948-01-02T00:00:00-02:00"^^xsd:dateTime .
-}}
-</source>
+ * TODO
+ * 
  *************************************************************************************
  *
  *     This file is part of GeSHi.
