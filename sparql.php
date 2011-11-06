@@ -14,10 +14,70 @@
  * 2011/11/05 (1.0.0)
  *  -  First Release
  *
- * TODO 
+ * Examples (with Mediawiki)
  * -------------------------
- * * Add all keywords
- *
+<source lang="sparql">
+PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbpedia2:<http://dbpedia.org/property/>
+PREFIX dbpedia:<http://dbpedia.org/ontology/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+SELECT ?link ?date ?label ?comment
+WHERE { 
+?film <http://purl.org/dc/terms/subject> <http://dbpedia.org/resource/Category:French_films>;
+        rdfs:comment ?comment;
+        rdfs:label ?label;
+        dbpedia:releaseDate  ?date;
+        foaf:page ?link.
+    FILTER langMatches( lang(?comment), 'en')
+    FILTER langMatches( lang(?label), 'en')
+}ORDER BY ?date OFFSET  1 limit 10 
+</source>
+-----------------------------------------------------------
+<source lang="sparql">
+PREFIX sch-ont: <http://education.data.gov.uk/def/school/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX geo:<http://www.w3.org/2003/01/geo/wgs84_pos#>
+SELECT ?name  ?capacity ?web  ?address1 ?address2 ?postcode ?town ?long ?lat WHERE {
+?school A sch-ont:School;
+sch-ont:establishmentName ?name;
+sch-ont:schoolCapacity ?capacity  ;
+sch-ont:religiousCharacter sch-ont:ReligiousCharacter_Does_not_apply ;
+sch-ont:statutoryHighAge ?ageMax ;
+sch-ont:statutoryLowAge ?ageMin ;
+geo:long ?long;
+geo:lat ?lat;
+sch-ont:districtAdministrative ?da .        
+?da rdfs:label "Birmingham".
+OPTIONAL {?school sch-ont:websiteAddress ?web .}
+OPTIONAL {
+        ?school sch-ont:address ?address.
+        ?address sch-ont:address1 ?address1;
+        sch-ont:postcode ?postcode;
+        sch-ont:town ?town.
+        OPTIONAL {?address sch-ont:address2 ?address2. }
+    }
+FILTER (?capacity < 300 && ?ageMax >= 15 && ?ageMin <= 15 )
+}
+ORDER BY DESC(?capacity)
+LIMIT 10
+</source>
+----------------------------------------
+<source lang="sparql">
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+
+DELETE DATA
+{ GRAPH <http://example/bookStore> { 
+<http://example/book2> ?predicat ?objet.
+}}
+
+INSERT DATA
+{ GRAPH <http://example/bookStore> { 
+<http://example/book2> ns:price 44 .
+<http://example/book2> dc:title "Sir David Copperfield"@en .
+<http://example/book2> dc:creator 'Edmond Wells'^^xsd:string@fr-FR .
+<http://example/book2> dc:date "1948-01-02T00:00:00-02:00"^^xsd:dateTime .
+}}
+</source>
  *************************************************************************************
  *
  *     This file is part of GeSHi.
@@ -43,6 +103,7 @@ $language_data = array (
     'COMMENT_SINGLE' => array('#'),
     'COMMENT_MULTI' => array('/*' => '*/' ),
     'COMMENT_REGEXP' => array(
+        //IRI (it's not a comment ;)
         1 => "/<[^> ]*>/i"
     ),
     'CASE_KEYWORDS' => 1,
@@ -88,15 +149,21 @@ $language_data = array (
     'REGEXPS' => array(
             //Variables without braces
             1 => "\\?[a-zA-Z_][a-zA-Z0-9_]*",
-            //Variables without braces
-            2 => "[a-zA-Z_][a-zA-Z0-9_]*:"
+            //prefix
+            2 => "[a-zA-Z_.\\-0-9]*:",
+            //tag lang
+            3 => "@[^ .)}]*",
         ),
     'SYMBOLS' => array(
             0 => array(
-                        '{', '}', '.', ':', ';'
+                        '{', '}' , '.', ';'
             ),
             1 => array(
-                        '(', ')', '=','+', '-', '*', '/', '%'
+                        '^^',
+                        '<=','>=','!=','=','<','>','|',
+                        '&&','||', 
+                        '(',')','[', ']', 
+                        '+','-','*','!','/'
             ),
         ),
     'CASE_SENSITIVE' => array(
@@ -109,7 +176,7 @@ $language_data = array (
             ),
         'COMMENTS' => array(
             0 => 'color: #808080; font-style: italic;',
-            1 => 'color: #780078;',
+            1 => 'color: #000078;',
             //2 => 'color: #808080; font-style: italic;',
             'MULTI' => 'color: #808080; font-style: italic;',
             ),
@@ -121,18 +188,19 @@ $language_data = array (
             0 => 'color: #ff0000;'
             ),
         'NUMBERS' => array(
-            0 => 'color: #cc66cc;'
+            0 => 'color: #FF63C3;'
             ),
         'METHODS' => array(
             ),
         'SYMBOLS' => array(
             0 => 'color: #0000FF;',
-            1 => 'color: #00FF00;' 
+            1 => 'color: #FF8000; font-weight: bold;' 
             ),
         'SCRIPT' => array(),
         'REGEXPS' => array(
             1 => 'color: #007800;',
-            2 => 'color: #000078;',
+            2 => 'color: #780078;',            
+            3 => 'color: #005078;'
             )
         ),
     'URLS' => array(
