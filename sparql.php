@@ -51,7 +51,7 @@ $language_data = array (
         1 => array(          
             'BASE','PREFIX','SELECT','DISTINCT','REDUCED','CONSTRUCT','DESCRIBE','ASK','FROM',
             'NAMED','WHERE','ORDER','BY','ASC','DESC','LIMIT','OFFSET','OPTIONAL','GRAPH',
-            'UNION','FILTER','A','STR','LANG','LANGMATCHES','DATATYPE','BOUND','SAMETERM',
+            'UNION','FILTER','STR','LANG','LANGMATCHES','DATATYPE','BOUND','SAMETERM',
             'ISIRI','ISURI','ISBLANK',
             'ISLITERAL','REGEX','SUBSTR','TRUE',
             'FALSE','LOAD','CLEAR',
@@ -110,7 +110,7 @@ $language_data = array (
         ),
     'STYLES' => array(
         'KEYWORDS' => array(
-            1 => 'color: #993333; font-weight: bold;'
+            1 => 'color: #993333; font-weight: bold;'            
             ),
         'COMMENTS' => array(
             0 => 'color: #808080; font-style: italic;',
